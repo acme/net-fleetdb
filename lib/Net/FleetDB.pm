@@ -25,7 +25,7 @@ sub new {
     return $self;
 }
 
-sub call {
+sub query {
     my ( $self, @args ) = @_;
     my $socket  = $self->{socket};
     my $request = to_json( \@args );
