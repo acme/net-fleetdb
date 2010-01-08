@@ -3,12 +3,13 @@ use strict;
 use warnings;
 use Net::FleetDB;
 use Test::Exception;
-use Test::More tests => 17;
+use Test::More;
 
-my $fleetdb = Net::FleetDB->new(
-    host => '127.0.0.1',
-    port => 3400,
-);
+my $fleetdb;
+eval { $fleetdb = Net::FleetDB->new( host => '127.0.0.1', port => 3400 ); };
+
+plan skip_all => "Local FleetDB needed for testing: $@" if $@;
+plan tests => 17;
 
 is( $fleetdb->query('ping'), 'pong', '["ping"]' );
 

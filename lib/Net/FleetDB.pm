@@ -16,7 +16,7 @@ sub new {
         PeerHost => $host,
         PeerPort => $port,
         Timeout  => 60
-    );
+    ) || die "Error connecting to $host:$port: $!";
 
     my $self = bless {
         host   => $host,
