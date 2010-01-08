@@ -16,55 +16,71 @@ is( $fleetdb->query('ping'), 'pong', '["ping"]' );
 throws_ok( sub { $fleetdb->query('NOTAMETHOD') },
     qr/Malformed query: unrecognized query type '"NOTAMETHOD"'/ );
 
-ok( $fleetdb->query( 'delete', 'people' ), '["delete","people"]' );
-ok( $fleetdb->query( 'drop-index', 'people', 'name' ),
-    '["drop-index","people","name"]' );
-is( $fleetdb->query( 'count', 'people' ), 0, '["count","people"]' );
-
-is( $fleetdb->query( 'insert', 'people', { 'id' => 1, 'name' => 'Bob' } ),
-    1, '["insert","people",{"name":"Bob","id":1}]' );
-is( $fleetdb->query( 'count', 'people' ), 1, '["count","people"]' );
-
-is( $fleetdb->query( 'update', 'people', { 'id' => 1, 'name' => 'Bobby' } ),
-    1, '["update","people",{"name":"Bobby","id":1}]' );
-is( $fleetdb->query( 'count', 'people' ), 1, '["count","people"]' );
+ok( $fleetdb->query( 'delete', 'people_test' ), '["delete","people_test"]' );
+ok( $fleetdb->query( 'drop-index', 'people_test', 'name' ),
+    '["drop-index","people_test","name"]' );
+is( $fleetdb->query( 'count', 'people_test' ), 0, '["count","people_test"]' );
 
 is( $fleetdb->query(
-        'insert', 'people',
+        'insert', 'people_test', { 'id' => 1, 'name' => 'Bob' }
+    ),
+    1,
+    '["insert","people_test",{"name":"Bob","id":1}]'
+);
+is( $fleetdb->query( 'count', 'people_test' ), 1, '["count","people_test"]' );
+
+is( $fleetdb->query(
+        'update', 'people_test', { 'id' => 1, 'name' => 'Bobby' }
+    ),
+    1,
+    '["update","people_test",{"name":"Bobby","id":1}]'
+);
+is( $fleetdb->query( 'count', 'people_test' ), 1, '["count","people_test"]' );
+
+is( $fleetdb->query(
+        'insert', 'people_test',
         [ { 'id' => 2, 'name' => 'Bob2' }, { 'id' => 3, 'name' => 'Amy' } ]
     ),
     2,
-    '["insert","people",[{"name":"Bob2","id":2},{"name":"Amy","id":3}]]'
+    '["insert","people_test",[{"name":"Bob2","id":2},{"name":"Amy","id":3}]]'
 );
-is( $fleetdb->query( 'count', 'people' ), 3, '["count","people"]' );
-is( $fleetdb->query( 'count', 'people', { 'where' => [ '>', 'id', 2 ] } ),
-    1, '["count","people",{"where":[">","id",2]}]' );
+is( $fleetdb->query( 'count', 'people_test' ), 3, '["count","people_test"]' );
+is( $fleetdb->query(
+        'count', 'people_test', { 'where' => [ '>', 'id', 2 ] }
+    ),
+    1,
+    '["count","people_test",{"where":[">","id",2]}]'
+);
 
-is( $fleetdb->query( 'create-index', 'people', 'name' ),
-    1, '["create-index","people","name"]' );
+is( $fleetdb->query( 'create-index', 'people_test', 'name' ),
+    1, '["create-index","people_test","name"]' );
 
 is_deeply(
-    $fleetdb->query( 'select', 'people', { 'order' => [ 'id', 'asc' ] } ),
+    $fleetdb->query(
+        'select', 'people_test', { 'order' => [ 'id', 'asc' ] }
+    ),
     [   { 'id' => 1, 'name' => 'Bobby' },
         { 'id' => 2, 'name' => 'Bob2' },
         { 'id' => 3, 'name' => 'Amy' },
     ],
-    '["select","people",{"order":["id","asc"]}]'
+    '["select","people_test",{"order":["id","asc"]}]'
 );
 
 is_deeply(
-    $fleetdb->query( 'select', 'people', { 'order' => [ 'name', 'asc' ] } ),
+    $fleetdb->query(
+        'select', 'people_test', { 'order' => [ 'name', 'asc' ] }
+    ),
     [   { 'id' => 3, 'name' => 'Amy' },
         { 'id' => 2, 'name' => 'Bob2' },
         { 'id' => 1, 'name' => 'Bobby' },
     ],
-    '["select","people",{"order":["name","asc"]}]'
+    '["select","people_test",{"order":["name","asc"]}]'
 );
 
 is( $fleetdb->query(
-        'delete', 'people', { 'where' => [ '=', 'name', 'Bobby' ] }
+        'delete', 'people_test', { 'where' => [ '=', 'name', 'Bobby' ] }
     ),
     1,
-    '["delete","people",{"where":["=","name","Bobby"]}]'
+    '["delete","people_test",{"where":["=","name","Bobby"]}]'
 );
-is( $fleetdb->query( 'count', 'people' ), 2, '["count","people"]' );
+is( $fleetdb->query( 'count', 'people_test' ), 2, '["count","people_test"]' );
