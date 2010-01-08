@@ -1,7 +1,7 @@
 package Net::FleetDB;
 use warnings;
 use strict;
-use Carp qw(cluck);
+use Carp qw(croak);
 use IO::Socket::INET;
 use JSON::XS::VersionOneAndTwo;
 
@@ -36,7 +36,7 @@ sub query {
     my $return = from_json($response);
 
     if ( $return->[0] != 0 ) {
-        cluck( $return->[1] );
+        croak( $return->[1] );
     } else {
         return $return->[1];
     }
