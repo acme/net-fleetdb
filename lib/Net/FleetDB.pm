@@ -30,7 +30,7 @@ sub query {
     my ( $self, @args ) = @_;
     my $socket  = $self->{socket};
     my $request = to_json( \@args );
-    warn "-> $request\n" if 1;
+    warn "-> $request\n" if 0;
     $socket->print( $request . "\n" ) || die $!;
     my $response = $socket->getline || die $!;
     warn "<- $response" if 0;
