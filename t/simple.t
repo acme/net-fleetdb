@@ -9,16 +9,15 @@ my $fleetdb;
 eval { $fleetdb = Net::FleetDB->new( host => '127.0.0.1', port => 3400 ); };
 
 plan skip_all => "Local FleetDB needed for testing: $@" if $@;
-plan tests => 17;
+plan tests => 15;
 
 is( $fleetdb->query('ping'), 'pong', '["ping"]' );
 
 throws_ok( sub { $fleetdb->query('NOTAMETHOD') },
     qr/Malformed query: unrecognized query type '"NOTAMETHOD"'/ );
 
-ok( $fleetdb->query( 'delete', 'people_test' ), '["delete","people_test"]' );
-ok( $fleetdb->query( 'drop-index', 'people_test', 'name' ),
-    '["drop-index","people_test","name"]' );
+$fleetdb->query( 'delete', 'people_test' );
+$fleetdb->query( 'drop-index', 'people_test', 'name' );
 is( $fleetdb->query( 'count', 'people_test' ), 0, '["count","people_test"]' );
 
 is( $fleetdb->query(
