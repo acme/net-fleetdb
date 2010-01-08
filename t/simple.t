@@ -68,7 +68,3 @@ is( $fleetdb->query(
     '["delete","people",{"where":["=","name","Bobby"]}]'
 );
 is( $fleetdb->query( 'count', 'people' ), 2, '["count","people"]' );
-
-foreach my $collection ( @{ $fleetdb->query('list-collections') } ) {
-    warn $collection;
-}
