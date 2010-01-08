@@ -2,7 +2,8 @@
 use strict;
 use warnings;
 use Net::FleetDB;
-use Test::More tests => 16;
+use Test::Exception;
+use Test::More tests => 17;
 
 my $fleetdb = Net::FleetDB->new(
     host => '127.0.0.1',
@@ -10,6 +11,9 @@ my $fleetdb = Net::FleetDB->new(
 );
 
 is( $fleetdb->query('ping'), 'pong', '["ping"]' );
+
+throws_ok( sub { $fleetdb->query('NOTAMETHOD') },
+    qr/Malformed query: unrecognized query type '"NOTAMETHOD"'/ );
 
 ok( $fleetdb->query( 'delete', 'people' ), '["delete","people"]' );
 ok( $fleetdb->query( 'drop-index', 'people', 'name' ),
