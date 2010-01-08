@@ -4,6 +4,7 @@ use strict;
 use Carp qw(croak);
 use IO::Socket::INET;
 use JSON::XS::VersionOneAndTwo;
+our $VERSION = '0.33';
 
 sub new {
     my ( $class, %args ) = @_;
